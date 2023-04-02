@@ -23,7 +23,7 @@ spec:
         app: rbac
     spec:
       containers:
-      - image: rbac-service:2.2
+      - image: rbac-service:1680477990
         imagePullPolicy: Never
         name: rbac-service
         ports:

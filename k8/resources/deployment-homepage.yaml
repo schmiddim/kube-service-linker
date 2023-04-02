@@ -23,7 +23,7 @@ spec:
         app: homepage
     spec:
       containers:
-        - image: homepage-service:2.2
+        - image: homepage-service:1680477990
           imagePullPolicy: Never #very important for rancher
           name: homepage-service
           env:
