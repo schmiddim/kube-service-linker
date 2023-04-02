@@ -1,0 +1,7 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - resources/deployment-homepage.yaml
+  - resources/deployment-rbac.yaml
+  - resources/deployment-user.yaml
+  - resources/mysql.yaml

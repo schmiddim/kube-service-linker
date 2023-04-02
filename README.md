@@ -1,6 +1,6 @@
 # Headline
 
-
+https://docs.rancherdesktop.io/
 ## Usage 
 
 1. you need Rancher Desktop
@@ -8,5 +8,8 @@
 3. ```shell
    ./build-docker-images
    ```
+4. ```shell 
+   kubectl apply -k k8/
+   ```   
    
-4. IDK
+5. IDK

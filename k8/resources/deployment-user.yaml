@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: user
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: user
+  name: user
+  namespace: user
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: user
+
+  template:
+    metadata:
+      labels:
+        app: user
+    spec:
+      containers:
+      - image: user-service:2.2
+        imagePullPolicy: Never
+        name: user-service
+        env:
+          - name: MYSQL_DATABASE_USER
+            value: "root"
+          - name: MYSQL_DATABASE_PASSWORD
+            value: "password"
+          - name: MYSQL_DATABASE_DB
+            value: "mydb"
+          - name: MYSQL_DATABASE_HOST
+            value: "mysql.db"
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: user
+  name: user
+  namespace: user
+spec:
+  ports:
+    - name: "8080"
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: user
+  type: ClusterIP
+
