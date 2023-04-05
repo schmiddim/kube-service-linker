@@ -46,6 +46,7 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
+    decMgmtProvides: userService
     app: user
   name: user
   namespace: user

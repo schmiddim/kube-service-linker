@@ -9,6 +9,9 @@ metadata:
 
   labels:
     app: homepage
+
+    decMgmtRequires-a: userService
+    decMgmtRequires-b: rbacService
   name: homepage
   namespace: homepage
 spec:
@@ -21,6 +24,8 @@ spec:
     metadata:
       labels:
         app: homepage
+        decMgmtRequires-a: userService
+        decMgmtRequires-b: rbacService
     spec:
       containers:
         - image: homepage-service:1680477990
