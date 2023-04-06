@@ -28,7 +28,7 @@ spec:
         decMgmtRequires-b: rbacService
     spec:
       containers:
-        - image: homepage-service:1680774168
+        - image: homepage-service:1680774988
           imagePullPolicy: Never #very important for rancher
           name: homepage-service
           ports:

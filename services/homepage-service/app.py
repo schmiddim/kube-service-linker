@@ -36,6 +36,7 @@ def index():
 
                  "userService": user_data,
                  "rbacService": rbac_data,
+                 "endpoints":[user_endpoint, rbac_endpoint]
                  }
     return jsonify(resp_user)
 

@@ -22,7 +22,7 @@ spec:
         app: user
     spec:
       containers:
-      - image: user-service:1680774168
+      - image: user-service:1680774988
         imagePullPolicy: Never
         name: user-service
         env:
