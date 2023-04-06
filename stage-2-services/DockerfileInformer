@@ -1,0 +1,21 @@
+# Verwenden Sie das offizielle Python-Image auf Basis von Alpine Linux
+FROM python:3.9-alpine
+
+# Arbeitsverzeichnis erstellen und festlegen
+WORKDIR /app
+
+# Sicherheits- und Abhängigkeitsmanagement
+RUN apk add --no-cache --virtual .build-deps gcc musl-dev
+
+# Kopieren der Anforderungsdatei und Installieren der Abhängigkeiten
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Bereinigung der Build-Abhängigkeiten
+RUN apk del .build-deps
+
+# Kopieren des restlichen Codes
+COPY . .
+
+# Standardkommando zum Ausführen des Programms
+CMD ["python", "informer.py"]

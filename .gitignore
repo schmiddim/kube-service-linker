@@ -1,2 +1,31 @@
 venv
 __pycache__
+# Go-Compiler- und Build-Ausgaben
+*.o
+*.a
+*.exe
+*.test
+*.prof
+
+# Go-Module und Abhängigkeiten
+/go.sum
+/go.mod
+/vendor/
+/Godeps/
+/bin/
+/pkg/
+
+# Build-Ausgabe
+/build/
+
+# VS Code spezifische Dateien und Ordner
+.vscode/
+*.code-workspace
+
+# JetBrains spezifische Dateien und Ordner
+.idea/
+*.iml
+
+# System-spezifische Dateien und Ordner
+.DS_Store
+Thumbs.db
