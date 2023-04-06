@@ -7,7 +7,7 @@ import os
 app = Flask(__name__)
 
 user_endpoint = os.getenv("ENDPOINT_USER_SERVICE", "http://localhost:8080")
-rbac_endpoint = os.getenv("ENDPOINT_RBAC_ENDPOINT", "http://localhost:8090")
+rbac_endpoint = os.getenv("ENDPOINT_RBAC_SERVICE", "http://localhost:8090")
 
 
 @app.route('/')

@@ -28,14 +28,9 @@ spec:
         decMgmtRequires-b: rbacService
     spec:
       containers:
-        - image: homepage-service:1680477990
+        - image: homepage-service:1680774168
           imagePullPolicy: Never #very important for rancher
           name: homepage-service
-          env:
-            - name: ENDPOINT_USER_SERVICE
-              value: "http://user.user:8080"
-            - name: ENDPOINT_RBAC_ENDPOINT
-              value: "http://rbac.rbac:8080"
           ports:
             - containerPort: 8100
               name: http

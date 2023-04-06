@@ -1,7 +1,7 @@
 import time
 from kubernetes import client, config, watch
 import logging as log
-
+import inflection
 from modules import k8
 
 log.getLogger().setLevel(log.INFO)
@@ -48,7 +48,8 @@ def watch_for_deployments():
                     servicesWithRequirements[deployment_name] = []
 
                 if value not in servicesWithRequirements.get(deployment_name):
-                    log.info("Requirement {} for deployment {} is not registered yet - append".format(value, deployment_name))
+                    log.info("Requirement {} for deployment {} is not registered yet - append".format(value,
+                                                                                                      deployment_name))
                     servicesWithRequirements[deployment_name].append(value)
                 else:
                     log.info("Requirement {} for deployment {} is already registered".format(value, deployment_name))
@@ -70,16 +71,24 @@ def analyze_requirements(exposed_services, services_with_requirements):
                 deployment_name, target_namespace = deployment.split("===")
                 service_namespace = service.metadata.namespace
                 service_name = service.metadata.name
+                service_port = service.spec.ports[0].port
                 config_map_name = "{}-{}-endpoint".format(service_name, service_namespace)
-                data = {"url": "{}.{}".format(service_name, service_namespace)}
-                k8.create_configmap(target_namespace, config_map_name, data)
+
+                data = {"url": "http://{}.{}:{}".format(service_name, service_namespace, service_port)}
                 log.info("service {} provides the Requirement".format(item))
+                k8.create_configmap(target_namespace, config_map_name, data)
 
                 """
                 todo  mount a configmap with the service endpoint in format 
                 
                 servicename.namespace
                 """
+                log.info(
+                    "mount configmap {} into deployment {} in namespace {}".format(config_map_name, deployment_name,
+                                                                                   target_namespace))
+
+                k8.mount_configmap_as_env_var(deployment_name, target_namespace, config_map_name,
+                                              "ENDPOINT_{}".format(inflection.underscore(item)).upper())
 
             else:
                 log.info("unable to resolve dependency {}".format(item))

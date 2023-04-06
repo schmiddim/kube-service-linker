@@ -1,7 +1,56 @@
 import logging as log
 
-import kubernetes.client
-from kubernetes import config, client
+from kubernetes import client, config
+
+
+def mount_configmap_as_env_var(deployment_name, target_namespace, config_map_name, env_var_name):
+    config.load_kube_config()
+
+    apps_v1 = client.AppsV1Api()
+
+    deployment = apps_v1.read_namespaced_deployment(deployment_name, target_namespace)
+
+    if not deployment.spec.template.spec.volumes:
+        deployment.spec.template.spec.volumes = []
+
+    if not deployment.spec.template.spec.containers[0].volume_mounts:
+        deployment.spec.template.spec.containers[0].volume_mounts = []
+
+    if not deployment.spec.template.spec.containers[0].env:
+        deployment.spec.template.spec.containers[0].env = []
+
+    volume_name = config_map_name
+    volume_mount_path = "/path/to/mount"
+    if volume_name not in [v.name for v in deployment.spec.template.spec.volumes]:
+        volume = client.V1Volume(
+            name=volume_name,
+            config_map=client.V1ConfigMapVolumeSource(
+                name=config_map_name
+            )
+        )
+
+        deployment.spec.template.spec.volumes.append(volume)
+
+    if volume_mount_path not in [vm.mount_path for vm in deployment.spec.template.spec.containers[0].volume_mounts]:
+        volume_mount = client.V1VolumeMount(
+            name=volume_name,
+            mount_path=volume_mount_path,
+            read_only=True
+        )
+        deployment.spec.template.spec.containers[0].volume_mounts.append(volume_mount)
+
+    env_var = client.V1EnvVar(
+        name=env_var_name,
+        value_from=client.V1EnvVarSource(
+            config_map_key_ref=client.V1ConfigMapKeySelector(
+                name=config_map_name,
+                key="url"
+            )
+        )
+    )
+    deployment.spec.template.spec.containers[0].env.append(env_var)
+    apps_v1.patch_namespaced_deployment(
+        deployment_name, target_namespace, deployment)
 
 
 def load_config(context=None):
@@ -13,17 +62,13 @@ def load_config(context=None):
         config.load_incluster_config()
 
 
-
 def create_configmap(namespace, name, data):
-    # Laden der Kubernetes-Konfiguration
     load_config()
 
-    # Erstellen des V1ConfigMap-Objekts
     cm = client.V1ConfigMap()
     cm.metadata = client.V1ObjectMeta(name=name)
     cm.data = data
 
-    # Initialisieren des Kubernetes API-Clients
     api = client.CoreV1Api()
 
     try:
@@ -40,5 +85,4 @@ def create_configmap(namespace, name, data):
             except client.rest.ApiException as e:
                 log.info(f"Error updating ConfigMap {name}: {e}")
         else:
-            log.error("Error creating configmap {} {}".format(name, e ))
-
+            log.error("Error creating configmap {} {}".format(name, e))
