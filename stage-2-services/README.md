@@ -1,4 +1,9 @@
-# Reads labels from Services and Deployments
+# Kube Service Linker
+
+![progress-banner](https://i.imgur.com/y9Kdi8O.jpg)
+
+
+Reads labels from Services and Deployments
 ## Informer 
 just run informer.py
 
@@ -14,3 +19,8 @@ Further approaches would be
 - Events
 - 
 - Kubernetes Informers
+
+
+## Todos
+- Linkerd Support
+- Istio Support

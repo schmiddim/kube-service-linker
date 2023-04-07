@@ -24,6 +24,7 @@ def watch_for_services():
     for event in w.stream(client.CoreV1Api().list_service_for_all_namespaces, timeout_seconds=10):
         if event['object'].metadata.labels is None:
             continue
+
         for key, value in event['object'].metadata.labels.items():
             if key == 'decMgmtProvides':
                 return_objects.append({
@@ -42,16 +43,20 @@ def watch_for_deployments():
     v1 = client.AppsV1Api()
 
     for event in w.stream(v1.list_deployment_for_all_namespaces, timeout_seconds=10):
+        requirements = []
         if event['object'].metadata.labels is None:
             continue
         for key, value in event['object'].metadata.labels.items():
             if key.startswith("decMgmtRequires"):
-                return_objects.append({
-                    "event": event['type'],
-                    "requirement": value,
-                    "deployment": event['object']
+                requirements.append(value)
 
-                })
+        if len(requirements) > 0:
+            return_objects.append({
+                "event": event['type'],
+                "requirement": requirements,
+                "deployment": event['object']
+
+            })
     return return_objects
 
 

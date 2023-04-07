@@ -17,7 +17,7 @@ spec:
       containers:
         - name: informer
 
-          image: informer:1680823975
+          image: informer:1680910598
           env:
             - name: ENDPOINT_API
               value: "http://processing.decmgmt:9000"
@@ -77,7 +77,7 @@ spec:
       serviceAccountName: decmgmt-sa
       containers:
         - name: processing
-          image: processing:1680823975
+          image: processing:1680910598
           ports:
             - containerPort: 9000
 
