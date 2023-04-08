@@ -9,9 +9,11 @@ metadata:
 
   labels:
     app: homepage
-
-    decMgmtRequires-a: userService
-    decMgmtRequires-b: rbacService
+    decMgmtRequires-a-name: "userService"
+    decMgmtRequires-a-variable-name: "url"
+    decMgmtRequires-b-name: "rbacService"
+    decMgmtRequires-b-variable-name: "url"
+    decMgmtRequires-b-version: "1.0"
   name: homepage
   namespace: homepage
 spec:
@@ -19,13 +21,10 @@ spec:
   selector:
     matchLabels:
       app: homepage
-
   template:
     metadata:
       labels:
         app: homepage
-        decMgmtRequires-a: userService
-        decMgmtRequires-b: rbacService
     spec:
       containers:
         - image: homepage-service:1680774988

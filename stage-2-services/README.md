@@ -24,3 +24,5 @@ Further approaches would be
 ## Todos
 - Linkerd Support
 - Istio Support
+
+- was wenn label kaputt? wildcards?

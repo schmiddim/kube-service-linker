@@ -1,6 +1,9 @@
 import logging
 
 logger = logging.getLogger(__name__)
+logging.basicConfig(
+    level=logging.INFO,
+)
 
 
 def analyze_requirements(data):
@@ -24,7 +27,7 @@ def analyze_requirements(data):
             for label, value in service.get('service').get('labels').items():
                 for requirement in deployment.get("requirements"):
                     if label == 'decMgmtProvides':
-                        if requirement == value:
+                        if requirement.get('name') == value:
                             logger.info("Depl {} in ns {} requirements {} fulfilled by {} ".format(
                                 deployment.get('deployment').get('name'),
                                 deployment.get('deployment').get('namespace'),

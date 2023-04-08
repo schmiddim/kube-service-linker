@@ -3,16 +3,26 @@
     {
       "event": "ADDED",
       "requirements": [
-        "userService",
-        "rbacService"
+        {
+          "name": "userService",
+          "variable": "url"
+        },
+        {
+          "name": "rbacService",
+          "variable": "url",
+          "version": "1.0"
+        }
       ],
       "deployment": {
         "name": "homepage",
         "namespace": "homepage",
         "labels": {
           "app": "homepage",
-          "decMgmtRequires-a": "userService",
-          "decMgmtRequires-b": "rbacService"
+          "decMgmtRequires-a-name": "userService",
+          "decMgmtRequires-a-variable-name": "url",
+          "decMgmtRequires-b-name": "rbacService",
+          "decMgmtRequires-b-variable-name": "url",
+          "decMgmtRequires-b-version": "1.0"
         }
       }
     }
