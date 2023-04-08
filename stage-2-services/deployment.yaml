@@ -17,7 +17,7 @@ spec:
       containers:
         - name: informer
 
-          image: informer:1680910598
+          image: informer:1680914430
           env:
             - name: ENDPOINT_API
               value: "http://processing.decmgmt:9000"
@@ -65,7 +65,7 @@ metadata:
   namespace: decmgmt
 
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: processing
@@ -77,7 +77,10 @@ spec:
       serviceAccountName: decmgmt-sa
       containers:
         - name: processing
-          image: processing:1680910598
+          image: processing:1680914430
+          env:
+            - name: PYTHONUNBUFFERED
+              value: "1"
           ports:
             - containerPort: 9000
 

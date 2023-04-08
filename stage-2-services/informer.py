@@ -53,7 +53,7 @@ def watch_for_deployments():
         if len(requirements) > 0:
             return_objects.append({
                 "event": event['type'],
-                "requirement": requirements,
+                "requirements": requirements,
                 "deployment": event['object']
 
             })
@@ -61,28 +61,27 @@ def watch_for_deployments():
 
 
 def send_data_to_endpoint(exposed_services, deployments_with_requirements, url):
-    flat_services = []
-    flat_deployments = []
     for deployment in deployments_with_requirements:
-        flat_deployments.append(service_to_dict(deployment.get('deployment')))
-        deployment['deployment'] = flat_deployments
+        deployment['deployment'] = service_to_dict(deployment.get('deployment'))
 
     for service in exposed_services:
-        flat_services.append(service_to_dict(service.get('service')))
-        service['service'] = flat_services
+        service['service'] = service_to_dict(service.get('service'))
 
     data = {
         "deployments_with_requirements": deployments_with_requirements,
         "exposed_services": exposed_services
     }
     headers = {'Content-type': 'application/json'}
+    try:
 
-    response = requests.post(url, json=data, headers=headers)
-    if response.status_code != 200:
-        log.error("unable to send data")
-    else:
-        log.info(response.status_code)
-        log.info(response.json())
+        response = requests.post(url, json=data, headers=headers)
+        if response.status_code != 200:
+            log.error("unable to send data")
+        else:
+            log.info(response.status_code)
+            log.info(response.json())
+    except Exception as e:
+        log.error("Error sending data to {}, {}".format( url, e))
 
 
 def main():
