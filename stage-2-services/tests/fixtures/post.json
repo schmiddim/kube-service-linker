@@ -1,0 +1,46 @@
+{
+  "deployments_with_requirements": [
+    {
+      "event": "ADDED",
+      "requirements": [
+        "userService",
+        "rbacService"
+      ],
+      "deployment": {
+        "name": "homepage",
+        "namespace": "homepage",
+        "labels": {
+          "app": "homepage",
+          "decMgmtRequires-a": "userService",
+          "decMgmtRequires-b": "rbacService"
+        }
+      }
+    }
+  ],
+  "exposed_services": [
+    {
+      "event": "ADDED",
+      "offers": "userService",
+      "service": {
+        "name": "user",
+        "namespace": "user",
+        "labels": {
+          "app": "user",
+          "decMgmtProvides": "userService"
+        }
+      }
+    },
+    {
+      "event": "ADDED",
+      "offers": "rbacService",
+      "service": {
+        "name": "rbac",
+        "namespace": "rbac",
+        "labels": {
+          "app": "rbac",
+          "decMgmtProvides": "rbacService"
+        }
+      }
+    }
+  ]
+}
