@@ -36,8 +36,6 @@ def create_or_update_configmap(namespace, name, data):
 
 
 def mount_configmap_as_env_var(deployment_name, target_namespace, config_map_name, env_var_name):
-    config.load_kube_config()
-
     apps_v1 = client.AppsV1Api()
 
     deployment = apps_v1.read_namespaced_deployment(deployment_name, target_namespace)

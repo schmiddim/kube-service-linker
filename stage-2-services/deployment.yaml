@@ -1,3 +1,9 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: decmgmt
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -17,8 +23,10 @@ spec:
       containers:
         - name: informer
 
-          image: informer:1680914430
+          image: informer:1681055009
           env:
+            - name: PYTHONUNBUFFERED
+              value: "1"
             - name: ENDPOINT_API
               value: "http://processing.decmgmt:9000"
           ports:
@@ -35,7 +43,10 @@ rules:
     verbs: [ "get", "list", "watch" ]
   - apiGroups: ["apps"]
     resources: ["deployments"]
-    verbs: ["get", "list", "watch"]
+    verbs: ["get", "list", "watch", "create", "update", "patch"]
+  - apiGroups: [ "*" ]
+    resources: [ "configmaps" ]
+    verbs: [ "create","get", "list", "watch", "delete" , "patch"]
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -77,7 +88,7 @@ spec:
       serviceAccountName: decmgmt-sa
       containers:
         - name: processing
-          image: processing:1680914430
+          image: processing:1681055009
           env:
             - name: PYTHONUNBUFFERED
               value: "1"
