@@ -29,7 +29,6 @@ def service_to_dict(service):
             'labels': service.metadata.labels
         }
     if isinstance(service, V1Service):
-        print("service")
         return {
             'name': service.metadata.name,
             'namespace': service.metadata.namespace,
@@ -93,7 +92,6 @@ def watch_for_deployments():
             continue
         requires_labels = extract_requires_labels(event['object'].metadata.labels)
         for key, value in event['object'].metadata.labels.items():
-            print("Requires Labels:", requires_labels)
             if key.startswith("decMgmtRequires-name"):
                 requirements.append(value)
 
