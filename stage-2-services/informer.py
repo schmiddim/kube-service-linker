@@ -13,13 +13,14 @@ log.getLogger().setLevel(log.INFO)
 def v1_service_port_to_dict(v1_service_ports):
     ports = []
     for v1_service_port in v1_service_ports:
-        ports.append( {
+        ports.append({
             'name': v1_service_port.name,
             'port': v1_service_port.port,
             'protocol': v1_service_port.protocol,
             'target_port': v1_service_port.target_port
         })
     return ports
+
 
 def service_to_dict(service):
     if isinstance(service, V1Deployment):
@@ -62,7 +63,6 @@ def extract_requires_labels(labels):
 
 
 def watch_for_services():
-    log.info("=== Looking for Services===")
     w = watch.Watch()
     return_objects = []
     for event in w.stream(client.CoreV1Api().list_service_for_all_namespaces, timeout_seconds=10):
@@ -81,7 +81,6 @@ def watch_for_services():
 
 
 def watch_for_deployments():
-    log.info("=== Looking for Deployments===")
     w = watch.Watch()
     return_objects = []
     v1 = client.AppsV1Api()
@@ -123,7 +122,7 @@ def send_data_to_endpoint(exposed_services, deployments_with_requirements, url):
         if response.status_code != 200:
             log.error("unable to send data")
         else:
-            log.info(response.status_code)
+            log.info("send data")
             log.info(response.json())
     except Exception as e:
         log.error("Error sending data to {}, {}".format(url, e))
