@@ -26,3 +26,4 @@ Further approaches would be
 - Istio Support
 
 - was wenn label kaputt? wildcards?
+- secret und kind verwursteln

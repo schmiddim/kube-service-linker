@@ -4,13 +4,15 @@
       "event": "ADDED",
       "requirements": [
         {
-          "name": "userService",
-          "variable": "url"
-        },
-        {
+          "kind": "service-mount",
           "name": "rbacService",
           "variable": "url",
           "version": "1.0"
+        },
+        {
+          "kind": "service-mount",
+          "name": "userService",
+          "variable": "url"
         }
       ],
       "deployment": {
@@ -18,11 +20,33 @@
         "namespace": "homepage",
         "labels": {
           "app": "homepage",
+          "decMgmtRequires-a-kind": "service-mount",
           "decMgmtRequires-a-name": "userService",
           "decMgmtRequires-a-variable-name": "url",
+          "decMgmtRequires-b-kind": "service-mount",
           "decMgmtRequires-b-name": "rbacService",
           "decMgmtRequires-b-variable-name": "url",
           "decMgmtRequires-b-version": "1.0"
+        }
+      }
+    },
+    {
+      "event": "ADDED",
+      "requirements": [
+        {
+          "kind": "secret",
+          "name": "db",
+          "secret": "mysql-secret"
+        }
+      ],
+      "deployment": {
+        "name": "user",
+        "namespace": "user",
+        "labels": {
+          "app": "user",
+          "decMgmtRequires-a-kind": "secret",
+          "decMgmtRequires-a-name": "db",
+          "decMgmtRequires-a-secret-ref": "mysql-secret"
         }
       }
     }
@@ -37,7 +61,15 @@
         "labels": {
           "app": "user",
           "decMgmtProvides": "userService"
-        }
+        },
+        "ports": [
+          {
+            "name": "8080",
+            "port": 8080,
+            "protocol": "TCP",
+            "target_port": 8080
+          }
+        ]
       }
     },
     {
@@ -49,7 +81,15 @@
         "labels": {
           "app": "rbac",
           "decMgmtProvides": "rbacService"
-        }
+        },
+        "ports": [
+          {
+            "name": "8080",
+            "port": 8080,
+            "protocol": "TCP",
+            "target_port": 8090
+          }
+        ]
       }
     }
   ]

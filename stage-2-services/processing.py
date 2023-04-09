@@ -14,7 +14,7 @@ logging.basicConfig(
 def process_post_request():
     data = request.get_json()
     print(data)
-    analyze_requirements(data)
+    # analyze_requirements(data)
 
     return jsonify({'result': "ok", "recived": data})
 

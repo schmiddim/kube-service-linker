@@ -3,18 +3,41 @@ import os
 
 import requests
 from kubernetes import client, watch
+from kubernetes.client import V1Deployment, V1Service
 
 from modules.kube import load_config
 
 log.getLogger().setLevel(log.INFO)
 
 
+def v1_service_port_to_dict(v1_service_ports):
+    ports = []
+    for v1_service_port in v1_service_ports:
+        ports.append( {
+            'name': v1_service_port.name,
+            'port': v1_service_port.port,
+            'protocol': v1_service_port.protocol,
+            'target_port': v1_service_port.target_port
+        })
+    return ports
+
 def service_to_dict(service):
-    return {
-        'name': service.metadata.name,
-        'namespace': service.metadata.namespace,
-        'labels': service.metadata.labels
-    }
+    if isinstance(service, V1Deployment):
+        return {
+            'name': service.metadata.name,
+            'namespace': service.metadata.namespace,
+            'labels': service.metadata.labels
+        }
+    if isinstance(service, V1Service):
+        print("service")
+        return {
+            'name': service.metadata.name,
+            'namespace': service.metadata.namespace,
+            'labels': service.metadata.labels,
+            'ports': v1_service_port_to_dict(service.spec.ports)
+        }
+
+    raise TypeError("Kind {} unknown".format(service))
 
 
 def extract_requires_labels(labels):

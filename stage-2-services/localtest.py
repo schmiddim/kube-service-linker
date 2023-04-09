@@ -1,5 +1,6 @@
 import json
 import logging as log
+from modules.kube import *
 from modules.logic import analyze_requirements
 
 log.getLogger().setLevel(log.INFO)

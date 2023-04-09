@@ -8,6 +8,10 @@ kind: Deployment
 metadata:
   labels:
     app: user
+#    todo: later
+#    decMgmtRequires-a-name: "mysql"
+#    decMgmtRequires-a-config-map-ref: "userDatabaseConfig"
+
   name: user
   namespace: user
 spec:
