@@ -50,7 +50,7 @@ def analyze_requirements(response_data):
                             cm_data = {"url": "http://{}.{}:{}".format(service_name, service_namespace, service_port)}
 
                             create_or_update_configmap(namespace=deployment_namespace, name=config_map_name,
-                                                       data=cm_data)
+                                                       data=cm_data,labels= [{"created-by": "kube-service-linker"}])
                             mount_configmap_as_env_var(deployment_name, deployment_namespace, config_map_name,
                                                        "ENDPOINT_{}".format(
                                                            inflection.underscore(requirement_name)).upper())

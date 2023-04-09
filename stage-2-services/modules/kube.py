@@ -12,23 +12,23 @@ def load_config(context=None):
         config.load_incluster_config()
 
 
-def create_or_update_configmap(namespace, name, data):
+def create_or_update_configmap(namespace, name, data, labels: []) -> None:
+    label_dict = {}
+    for d in labels:
+        label_dict.update(d)
+
     cm = client.V1ConfigMap()
-    cm.metadata = client.V1ObjectMeta(name=name)
+    cm.metadata = client.V1ObjectMeta(name=name, labels=label_dict)
     cm.data = data
     api = client.CoreV1Api()
 
     try:
 
         api.create_namespaced_config_map(namespace=namespace, body=cm)
-        log.info(f"ConfigMap {name} in ns {namespace} was created")
     except client.rest.ApiException as e:
-
         if e.status == 409:
             try:
                 api.patch_namespaced_config_map(namespace=namespace, name=name, body=cm)
-                log.info("ConfigMap {}  in namespace {} updated".format(name, namespace))
-
             except client.rest.ApiException as e:
                 log.info(f"Error updating ConfigMap {name}: {e}")
         else:
