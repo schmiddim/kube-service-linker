@@ -6,8 +6,11 @@ from kubernetes import client, watch
 from kubernetes.client import V1Deployment, V1Service
 
 from modules.kube import load_config
+from modules.crds import create_service_requirement_crd
 
 log.getLogger().setLevel(log.INFO)
+load_config()
+create_service_requirement_crd()
 
 
 def v1_service_port_to_dict(v1_service_ports):
@@ -151,7 +154,7 @@ def send_data_to_endpoint(exposed_services, deployments_with_requirements, servi
     data = {
         "deployments_with_requirements": deployments_with_requirements,
         "exposed_services": exposed_services,
-        "service_requirements":service_requirements,
+        "service_requirements": service_requirements,
     }
     headers = {'Content-type': 'application/json'}
     try:

@@ -37,6 +37,7 @@ metadata:
   labels:
     app: rbac
     decMgmtProvides: rbacService
+    decMgmtVersion: "1.0.0"
   name: rbac
   namespace: rbac
 spec:

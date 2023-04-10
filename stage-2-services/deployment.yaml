@@ -23,7 +23,7 @@ spec:
       containers:
         - name: informer
 
-          image: informer:1681113763
+          image: informer:1681146697
           env:
             - name: PYTHONUNBUFFERED
               value: "1"
@@ -47,6 +47,17 @@ rules:
   - apiGroups: [ "*" ]
     resources: [ "configmaps" ]
     verbs: [ "create","get", "list", "watch", "delete" , "patch"]
+  - apiGroups:
+      - kubeservicelinker.com
+    resources:
+      - servicerequirements
+    verbs: [ "create","get", "list", "watch"]
+  - apiGroups:
+      - apiextensions.k8s.io
+    resources:
+      - customresourcedefinitions
+    verbs: [ "create","get", "list", "watch"]
+
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -88,7 +99,7 @@ spec:
       serviceAccountName: decmgmt-sa
       containers:
         - name: processing
-          image: processing:1681113763
+          image: processing:1681146697
           env:
             - name: PYTHONUNBUFFERED
               value: "1"

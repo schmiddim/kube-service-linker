@@ -6,7 +6,7 @@
         {
           "name": "rbacService",
           "variable": "url",
-          "version": "1.0"
+          "version": "1.0.0"
         }
       ],
       "deployment": {
@@ -16,7 +16,7 @@
           "app": "homepage",
           "decMgmtRequires-b-name": "rbacService",
           "decMgmtRequires-b-variable-name": "url",
-          "decMgmtRequires-b-version": "1.0"
+          "decMgmtRequires-b-version": "1.0.0"
         }
       }
     }

@@ -11,7 +11,7 @@ metadata:
     app: homepage
     decMgmtRequires-b-name: "rbacService"
     decMgmtRequires-b-variable-name: "url"
-    decMgmtRequires-b-version: "1.0"
+    decMgmtRequires-b-version: "1.0.0"
   name: homepage
   namespace: homepage
 spec:
