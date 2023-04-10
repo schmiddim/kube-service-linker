@@ -36,6 +36,22 @@ def service_to_dict(service):
             'labels': service.metadata.labels,
             'ports': v1_service_port_to_dict(service.spec.ports)
         }
+    if isinstance(service, dict) and service.get("kind") == "ServiceRequirement":
+        meta = service.get('metadata')
+        spec = service.get('spec')
+        ret_dict = {
+            'name': spec.get('deployment'),
+            'namespace': spec.get('namespace'),
+            'version_range': spec.get('versionRange'),
+            'requires_service': spec.get('requiresService'),
+            'created_by': {
+                'name': meta.get('name'),
+                'namespace': meta.get('namespace'),
+
+            }
+        }
+        # print(ret_dict)
+        return ret_dict
 
     raise TypeError("Kind {} unknown".format(service))
 
@@ -80,6 +96,25 @@ def watch_for_services():
     return return_objects
 
 
+def watch_for_service_requirements():
+    api_instance = client.CustomObjectsApi()
+    group = "kubeservicelinker.com"
+    version = "v1"
+    plural = "servicerequirements"
+
+    w = watch.Watch()
+
+    return_objects = []
+
+    for event in w.stream(api_instance.list_cluster_custom_object, group, version, plural, timeout_seconds=10):
+        return_objects.append({
+            "event": event['type'],
+            "service_requirement": event['object']
+        })
+
+    return return_objects
+
+
 def watch_for_deployments():
     w = watch.Watch()
     return_objects = []
@@ -104,7 +139,9 @@ def watch_for_deployments():
     return return_objects
 
 
-def send_data_to_endpoint(exposed_services, deployments_with_requirements, url):
+def send_data_to_endpoint(exposed_services, deployments_with_requirements, service_requirements, url):
+    for service_requirement in service_requirements:
+        service_requirement['service_requirement'] = service_to_dict(service_requirement.get('service_requirement'))
     for deployment in deployments_with_requirements:
         deployment['deployment'] = service_to_dict(deployment.get('deployment'))
 
@@ -113,7 +150,8 @@ def send_data_to_endpoint(exposed_services, deployments_with_requirements, url):
 
     data = {
         "deployments_with_requirements": deployments_with_requirements,
-        "exposed_services": exposed_services
+        "exposed_services": exposed_services,
+        "service_requirements":service_requirements,
     }
     headers = {'Content-type': 'application/json'}
     try:
@@ -131,10 +169,11 @@ def send_data_to_endpoint(exposed_services, deployments_with_requirements, url):
 def main():
     load_config()
     while True:
-        exposed_services = watch_for_services()
         deployments_with_requirements = watch_for_deployments()
+        exposed_services = watch_for_services()
+        service_requirements = watch_for_service_requirements()
         endpoint = os.getenv("ENDPOINT_API", "http://localhost:9000")
-        send_data_to_endpoint(exposed_services, deployments_with_requirements, endpoint)
+        send_data_to_endpoint(exposed_services, deployments_with_requirements, service_requirements, endpoint)
 
 
 if __name__ == '__main__':

@@ -63,5 +63,20 @@
         ]
       }
     }
+  ],
+  "service_requirements": [
+    {
+      "event": "ADDED",
+      "service_requirement": {
+        "name": "homepage",
+        "namespace": "homepage",
+        "version_range": "1.0.0",
+        "requires_service": "userService",
+        "created_by": {
+          "name": "my-service-requirement",
+          "namespace": "homepage"
+        }
+      }
+    }
   ]
 }
