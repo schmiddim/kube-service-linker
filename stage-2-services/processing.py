@@ -3,11 +3,14 @@ import logging
 from flask import Flask, request, jsonify
 from modules.kube import load_config
 from modules.logic import analyze_requirements
+from modules.crds import create_service_requirement_crd
 
 app = Flask(__name__)
 logging.basicConfig(
     level=logging.INFO,
 )
+load_config()
+create_service_requirement_crd()
 
 
 @app.route('/', methods=['POST'])

@@ -4,15 +4,9 @@
       "event": "ADDED",
       "requirements": [
         {
-          "kind": "service-mount",
           "name": "rbacService",
           "variable": "url",
           "version": "1.0"
-        },
-        {
-          "kind": "service-mount",
-          "name": "userService",
-          "variable": "url"
         }
       ],
       "deployment": {
@@ -20,33 +14,9 @@
         "namespace": "homepage",
         "labels": {
           "app": "homepage",
-          "decMgmtRequires-a-kind": "service-mount",
-          "decMgmtRequires-a-name": "userService",
-          "decMgmtRequires-a-variable-name": "url",
-          "decMgmtRequires-b-kind": "service-mount",
           "decMgmtRequires-b-name": "rbacService",
           "decMgmtRequires-b-variable-name": "url",
           "decMgmtRequires-b-version": "1.0"
-        }
-      }
-    },
-    {
-      "event": "ADDED",
-      "requirements": [
-        {
-          "kind": "secret",
-          "name": "db",
-          "secret": "mysql-secret"
-        }
-      ],
-      "deployment": {
-        "name": "user",
-        "namespace": "user",
-        "labels": {
-          "app": "user",
-          "decMgmtRequires-a-kind": "secret",
-          "decMgmtRequires-a-name": "db",
-          "decMgmtRequires-a-secret-ref": "mysql-secret"
         }
       }
     }
@@ -60,7 +30,8 @@
         "namespace": "user",
         "labels": {
           "app": "user",
-          "decMgmtProvides": "userService"
+          "decMgmtProvides": "userService",
+          "decMgmtVersion": "1.0.0"
         },
         "ports": [
           {

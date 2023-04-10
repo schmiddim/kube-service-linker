@@ -51,6 +51,7 @@ kind: Service
 metadata:
   labels:
     decMgmtProvides: userService
+    decMgmtVersion: "1.0.0"
     app: user
   name: user
   namespace: user

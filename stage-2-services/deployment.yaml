@@ -23,7 +23,7 @@ spec:
       containers:
         - name: informer
 
-          image: informer:1681059306
+          image: informer:1681113763
           env:
             - name: PYTHONUNBUFFERED
               value: "1"
@@ -88,7 +88,7 @@ spec:
       serviceAccountName: decmgmt-sa
       containers:
         - name: processing
-          image: processing:1681059306
+          image: processing:1681113763
           env:
             - name: PYTHONUNBUFFERED
               value: "1"

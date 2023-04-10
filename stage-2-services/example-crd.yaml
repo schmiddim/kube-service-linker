@@ -1,0 +1,10 @@
+apiVersion: kubeservicelinker.com/v1
+kind: ServiceRequirement
+metadata:
+  name: my-service-requirement
+  namespace: homepage
+spec:
+  requiresService: userService
+  versionRange: 1.0.0
+  namespace: homepage
+  deployment: homepage
