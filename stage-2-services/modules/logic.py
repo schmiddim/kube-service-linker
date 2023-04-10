@@ -12,6 +12,12 @@ load_config()
 
 
 def find_service_for_requirement(requirement, services):
+    """
+    @todo: version check from localcrdtest.py!!!!!!
+    :param requirement:
+    :param services:
+    :return:
+    """
     for service in services:
         for label, value in service.get('service').get('labels').items():
             if label == 'decMgmtProvides':
